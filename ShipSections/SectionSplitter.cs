@@ -5,8 +5,8 @@ using System.Text;
 
 namespace JKorTech.ShipSections
 {
-    [KSPModule("Section Root")]
-    public class SectionRoot : SectionInfo
+    [KSPModule("Section Splitter")]
+    public class SectionSplitter : SectionInfo
     {
         private const string NewSectionPrefix = "New Section ";
 
@@ -18,8 +18,8 @@ namespace JKorTech.ShipSections
 
         private static string GetNewSectionName()
         {
-            var currentSections = API.CurrentVesselParts.Select(part => part.FindModuleImplementing<SectionInfo>().section)
-                .Distinct().Where(section => section.StartsWith(NewSectionPrefix)).Select(section => section.Substring(NewSectionPrefix.Length))
+            var currentSections = API.SectionNames.Where(section => section.StartsWith(NewSectionPrefix))
+                .Select(section => section.Substring(NewSectionPrefix.Length))
                 .Select(section =>
                 {
                     int id;

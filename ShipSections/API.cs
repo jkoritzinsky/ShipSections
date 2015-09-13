@@ -28,7 +28,8 @@ namespace JKorTech.ShipSections
 
         public static void ChangeSectionName(string oldSectionName, string newSectionName)
         {
-            var sectionInfos = CurrentVesselParts.SelectMany(part => part.FindModulesImplementing<SectionInfo>()).Where(section => section.section == oldSectionName);
+            var sectionInfos = CurrentVesselParts.SelectMany(part => part.FindModulesImplementing<SectionInfo>())
+                .Where(section => section.section == oldSectionName);
             foreach (var sectionInfo in sectionInfos)
             {
                 sectionInfo.section = newSectionName;
@@ -36,10 +37,18 @@ namespace JKorTech.ShipSections
         }
 
         public static event Action SectionDataUpdated = () => { };
-        
+
         internal static void SendSectionDataUpdated()
         {
             SectionDataUpdated();
+        }
+
+        public static IEnumerable<string> SectionNames
+        {
+            get
+            {
+                return CurrentVesselParts.Select(part => part.FindModuleImplementing<SectionInfo>().section).Distinct();
+            }
         }
     }
 }
