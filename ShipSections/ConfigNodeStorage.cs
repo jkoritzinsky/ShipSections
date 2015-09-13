@@ -53,24 +53,24 @@ namespace KSPPluginFramework
         /// Test whether the configured FilePath exists
         /// </summary>
         /// <returns>True if its there</returns>
-        public Boolean FileExists
+        public bool FileExists
         {
             get
             {
-                return System.IO.File.Exists(FilePath);
+                return File.Exists(FilePath);
             }
         }
 
         /// <summary>
         /// Gets the filename portion of the FullPath
         /// </summary>
-        public String FileName
+        public string FileName
         {
             get { return Path.GetFileName(FilePath); }
         }
         /// <summary>
         /// Location of file for saving and loading methods
-        /// 
+        ///
         /// This can be an absolute path (eg c:\test.cfg) or a relative path from the location of the assembly dll (eg. ../config/test)
         /// </summary>
         public string FilePath
@@ -101,7 +101,7 @@ namespace KSPPluginFramework
         /// <summary>
         /// Loads the object from the ConfigNode structure in a file
         /// </summary>
-        /// <param name="fileFullName">Absolute Path to the file to load the ConfigNode structure from</param> 
+        /// <param name="fileFullName">Absolute Path to the file to load the ConfigNode structure from</param>
         /// <returns>Success of Load</returns>
         public bool Load(string fileFullName)
         {
@@ -153,7 +153,7 @@ namespace KSPPluginFramework
         /// <summary>
         /// Saves the object to a ConfigNode structure in a file
         /// </summary>
-        /// <param name="fileFullName">Absolute Path to the file to load the ConfigNode structure from</param> 
+        /// <param name="fileFullName">Absolute Path to the file to load the ConfigNode structure from</param>
         /// <returns>Success of Save</returns>
         public bool Save(string fileFullName)
         {
@@ -183,20 +183,20 @@ namespace KSPPluginFramework
         /// </summary>
         /// <param name="Message">Text to be printed - can be formatted as per String.format</param>
         /// <param name="strParams">Objects to feed into a String.format</param>
-        internal static void LogFormatted(String Message, params object[] strParams)
+        internal static void LogFormatted(string Message, params object[] strParams)
         {
             Message = string.Format(Message, strParams);                  // This fills the params into the message
-            var strMessageLine = $"{DateTime.Now},{Message}";                                           // This adds our standardised wrapper to each line
+            var strMessageLine = $"{DateTime.Now},{Message}";             // This adds our standardised wrapper to each line
             UnityEngine.Debug.Log(strMessageLine);                        // And this puts it in the log
         }
-        
+
         /// <summary>
         /// Some Structured logging to the debug file - ONLY RUNS WHEN DLL COMPILED IN DEBUG MODE
         /// </summary>
         /// <param name="Message">Text to be printed - can be formatted as per String.format</param>
         /// <param name="strParams">Objects to feed into a String.format</param>
         [System.Diagnostics.Conditional("DEBUG")]
-        internal static void LogFormatted_DebugOnly(String Message, params object[] strParams)
+        internal static void LogFormatted_DebugOnly(string Message, params object[] strParams)
         {
             LogFormatted("DEBUG: " + Message, strParams);
         }
