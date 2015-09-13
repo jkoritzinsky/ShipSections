@@ -15,11 +15,13 @@ namespace JKorTech.ShipSections
 
         public void AddOrUpdateSectionDataForMod(string modID, SectionData sectionData)
         {
-            if(data.Any(pair => pair.Key == modID && pair.Value.Any(section => section.sectionName == sectionData.sectionName)))
+            if(!data.ContainsKey(modID))
             {
-                data[modID].RemoveAll(section => section.sectionName == sectionData.sectionName);
-                data[modID].Add(sectionData);
+                data.Add(modID, new List<SectionData> { sectionData });
+                return;
             }
+            data[modID].RemoveAll(section => section.sectionName == sectionData.sectionName);
+            data[modID].Add(sectionData);
         }
     }
 }
