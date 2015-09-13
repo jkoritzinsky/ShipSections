@@ -8,12 +8,6 @@ License: The MIT License (MIT)
 Modified by Jeremy Koritzinsky, 2015 for ShipSections
 */
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using KSP;
-using UnityEngine;
 using System.IO;
 
 namespace KSPPluginFramework
