@@ -11,11 +11,9 @@ namespace JKorTech.ShipSections
         [Persistent]
         public Dictionary<string, List<SectionData>> data = new Dictionary<string, List<SectionData>>();
 
-        public IEnumerable<SectionData> GetSectionDataForMod(string modID) => data.Where(pair => pair.Key == modID).SelectMany(pair => pair.Value);
-
         public void AddOrUpdateSectionDataForMod(string modID, SectionData sectionData)
         {
-            if(!data.ContainsKey(modID))
+            if (!data.ContainsKey(modID))
             {
                 data.Add(modID, new List<SectionData> { sectionData });
                 return;
@@ -23,5 +21,7 @@ namespace JKorTech.ShipSections
             data[modID].RemoveAll(section => section.sectionName == sectionData.sectionName);
             data[modID].Add(sectionData);
         }
+
+        public IEnumerable<SectionData> GetSectionDataForMod(string modID) => data.Where(pair => pair.Key == modID).SelectMany(pair => pair.Value);
     }
 }
