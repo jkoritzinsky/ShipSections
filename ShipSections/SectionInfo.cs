@@ -12,6 +12,12 @@ namespace JKorTech.ShipSections
         [KSPField(guiActive = false, guiActiveEditor = true, guiName = "Section", isPersistant = true)]
         public string section = DefaultSection;
 
+        [Persistent]
+        public bool isSectionRoot = false;
+
+        [Persistent]
+        internal SectionDataContainer dataContainer = new SectionDataContainer();
+
         public override void OnStart(StartState state)
         {
             if(state != StartState.None && section == DefaultSection)

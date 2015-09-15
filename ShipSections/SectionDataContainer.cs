@@ -9,19 +9,21 @@ namespace JKorTech.ShipSections
     public class SectionDataContainer : ConfigNodeStorage
     {
         [Persistent]
-        public Dictionary<string, List<SectionData>> data = new Dictionary<string, List<SectionData>>();
+        public Dictionary<string, SectionData> data = new Dictionary<string, SectionData>();
 
         public void AddOrUpdateSectionDataForMod(string modID, SectionData sectionData)
         {
             if (!data.ContainsKey(modID))
             {
-                data.Add(modID, new List<SectionData> { sectionData });
-                return;
+                data.Add(modID, sectionData);
             }
-            data[modID].RemoveAll(section => section.sectionName == sectionData.sectionName);
-            data[modID].Add(sectionData);
+            else
+            {
+                data.Remove(modID);
+                data.Add(modID, sectionData);
+            }
         }
 
-        public IEnumerable<SectionData> GetSectionDataForMod(string modID) => data.Where(pair => pair.Key == modID).SelectMany(pair => pair.Value);
+        public SectionData GetSectionDataForMod(string modID) => data.First(pair => pair.Key == modID).Value;
     }
 }

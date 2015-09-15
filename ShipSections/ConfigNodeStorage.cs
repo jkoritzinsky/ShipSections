@@ -79,17 +79,8 @@ namespace KSPPluginFramework
             set
             {
                 //Combine the Location of the assembly and the provided string. This means we can use relative or absolute paths
-                _FilePath = Path.Combine(Path.Combine(HighLogic.SaveFolder, GetSaveFolderFromGameState()), value).Replace(@"\", "/");
+                _FilePath = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), value).Replace(@"\", "/");
             }
-        }
-
-        private static string GetSaveFolderFromGameState()
-        {
-            if (HighLogic.LoadedSceneIsEditor)
-            {
-                return Path.Combine("Ships", ShipConstruction.ShipType.ToString());
-            }
-            return Path.Combine("Ships", "InFlight");
         }
 
         /// <summary>
@@ -157,6 +148,8 @@ namespace KSPPluginFramework
         /// <returns>Success of Save</returns>
         public bool Save(string fileFullName)
         {
+            if (fileFullName == null)
+                return false;
             LogFormatted_DebugOnly("Saving ConfigNode");
             var blnReturn = false;
             try

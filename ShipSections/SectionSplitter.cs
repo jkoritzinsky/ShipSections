@@ -14,6 +14,7 @@ namespace JKorTech.ShipSections
         public void CreateNewSection()
         {
             SetNewSection(part, section, GetNewSectionName());
+            isSectionRoot = true;
         }
 
         private static string GetNewSectionName()

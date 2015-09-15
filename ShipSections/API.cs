@@ -34,21 +34,19 @@ namespace JKorTech.ShipSections
             {
                 sectionInfo.section = newSectionName;
             }
+            SectionNameChanged.Fire(oldSectionName, newSectionName);
         }
 
-        public static event Action SectionDataUpdated = () => { };
-
-        internal static void SendSectionDataUpdated()
-        {
-            SectionDataUpdated();
-        }
+        public static readonly EventData<string, string> SectionNameChanged = new EventData<string, string>("SectionNameChanged");
 
         public static IEnumerable<string> SectionNames
-        {
-            get
-            {
-                return CurrentVesselParts.Select(part => part.FindModuleImplementing<SectionInfo>().section).Distinct();
-            }
-        }
+            => CurrentVesselParts.Select(part => part.FindModuleImplementing<SectionInfo>().section).Distinct();
+        public static IEnumerable<IGrouping<string, Part>> PartsBySection
+            => CurrentVesselParts.GroupBy(part => part.FindModuleImplementing<SectionInfo>()?.section);
+        public static SectionData GetSectionDataForMod(string modID, string sectionName)
+            => PartsBySection.Single(section => section.Key == sectionName).Select(part => part.FindModuleImplementing<SectionInfo>())
+                    .Single(info => info.isSectionRoot).dataContainer.GetSectionDataForMod(modID);
+        public static T GetSectionDataForMod<T>(string modID, string sectionName)
+            where T : SectionData => (T)GetSectionDataForMod(modID, sectionName);
     }
 }

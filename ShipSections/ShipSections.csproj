@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="ConfigNodeStorage.cs" />
+    <Compile Include="PartSeperateAssist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionData.cs" />
     <Compile Include="SectionDataContainer.cs" />
