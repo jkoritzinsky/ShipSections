@@ -6,38 +6,64 @@ using UnityEngine;
 
 namespace JKorTech.ShipSections
 {
-    [KSPAddon(KSPAddon.Startup.Instantly, true)]
-    public class PartSeperateAssist : MonoBehaviour
+    [KSPAddon(KSPAddon.Startup.EditorAny, false)]
+    public class PartSeperateAssistEditor : PartSeperateAssist
     {
-        void Awake()
+        internal override void SubscribeToEvents()
         {
-            GameEvents.onPartJointBreak.Add(PartJointBroken);
+            GameEvents.onEditorPartEvent.Add(EditorPartEvent);
         }
 
-        private static void PartJointBroken(PartJoint data)
+        internal override void UnsubscribeFromEvents()
         {
-            var info = data.Host.FindModuleImplementing<SectionInfo>();
+            GameEvents.onEditorPartEvent.Remove(EditorPartEvent);
+        }
+
+
+        private void EditorPartEvent(ConstructionEventType data0, Part data1)
+        {
+            if (data0 == ConstructionEventType.PartDetached)
+            {
+                var info = data1.FindModuleImplementing<SectionInfo>();
+                CopySectionDataToOtherPartInSection(info, true);
+            }
+        }
+    }
+
+    public abstract class PartSeperateAssist : MonoBehaviour
+    {
+        void Start()
+        {
+            Debug.Log("{SS} Starting PartSeperateAssist.");
+            SubscribeToEvents();
+        }
+
+        internal abstract void SubscribeToEvents();
+        internal abstract void UnsubscribeFromEvents();
+
+        protected static void CopySectionDataToOtherPartInSection(SectionInfo info, bool unsetAsRoot)
+        {
             if (info.isSectionRoot)
             {
-                var otherPartInSection = API.PartsBySection.First(section => section.Key == info.section).FirstOrDefault(part => part != data.Host);
+                var otherPartInSection = API.PartsBySection.First(section => section.Key == info.section).FirstOrDefault(part => part != info.part);
                 if (otherPartInSection != null)
                 {
-                    TransferSectionData(info, otherPartInSection.FindModuleImplementing<SectionInfo>());
+                    CopySectionData(info, otherPartInSection.FindModuleImplementing<SectionInfo>(), unsetAsRoot);
                 }
             }
         }
 
-        private static void TransferSectionData(SectionInfo from, SectionInfo to)
+        private static void CopySectionData(SectionInfo from, SectionInfo to, bool unsetAsRoot)
         {
             if (from == to) return;
             to.dataContainer = from.dataContainer;
             to.isSectionRoot = true;
-            from.isSectionRoot = false;
+            from.isSectionRoot = !unsetAsRoot;
         }
 
         void OnDestroy()
         {
-            GameEvents.onPartJointBreak.Remove(PartJointBroken);
+            UnsubscribeFromEvents();
         }
     }
 }

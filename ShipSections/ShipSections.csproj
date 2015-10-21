@@ -45,12 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
-    <Compile Include="ConfigNodeStorage.cs" />
     <Compile Include="PartSeperateAssist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionData.cs" />
+    <Compile Include="SectionDataBase.cs" />
     <Compile Include="SectionDataContainer.cs" />
     <Compile Include="SectionInfo.cs" />
+    <Compile Include="SectionDataDictionary.cs" />
     <Compile Include="SectionSplitter.cs" />
   </ItemGroup>
   <ItemGroup>

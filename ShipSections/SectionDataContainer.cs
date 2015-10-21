@@ -1,29 +1,31 @@
-﻿using KSPPluginFramework;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
 namespace JKorTech.ShipSections
 {
-    public class SectionDataContainer : ConfigNodeStorage
+    public class SectionDataContainer
     {
-        [Persistent]
-        public Dictionary<string, SectionData> data = new Dictionary<string, SectionData>();
-
-        public void AddOrUpdateSectionDataForMod(string modID, SectionData sectionData)
+        [Persistent(collectionIndex = "SECTIONDATA", isPersistant = true)]
+        private List<SectionDataBase> data = new List<SectionDataBase>();
+        
+        internal void AddOrUpdateSectionDataForMod(SectionDataBase sectionData)
         {
-            if (!data.ContainsKey(modID))
-            {
-                data.Add(modID, sectionData);
-            }
+            SectionDataBase currentData = data.FirstOrDefault(data => Equals(data.GetType(), sectionData.GetType()));
+            if (currentData != null)
+                currentData.Merge(sectionData);
             else
-            {
-                data.Remove(modID);
-                data.Add(modID, sectionData);
-            }
+                data.Add(sectionData);
         }
 
-        public SectionData GetSectionDataForMod(string modID) => data.First(pair => pair.Key == modID).Value;
+        public T GetSectionData<T>()
+            where T : SectionDataBase
+        {
+            return data.OfType<T>().First();
+        }
+
+        internal ReadOnlyCollection<SectionDataBase> GetAllSectionDatas() => new ReadOnlyCollection<SectionDataBase>(data);
     }
 }
