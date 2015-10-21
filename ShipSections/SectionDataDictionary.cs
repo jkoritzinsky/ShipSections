@@ -15,9 +15,10 @@ namespace JKorTech.ShipSections
                     UnityEngine.Debug.LogWarning("[ShipSections] Malformed SECTIONDATADEF.");
                 }
                 var sectionDataType = AssemblyLoader.GetClassByName(typeof(SectionDataBase), def.GetValue("type"));
+                SectionDataTypes.Add(sectionDataType, def);
             }
         }
 
-        public static readonly Dictionary<string, Type> sectionDataTypes = new Dictionary<string, Type>();
+        public static Dictionary<Type, ConfigNode> SectionDataTypes { get; } = new Dictionary<Type, ConfigNode>();
     }
 }
