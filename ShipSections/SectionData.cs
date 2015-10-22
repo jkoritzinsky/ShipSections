@@ -6,7 +6,7 @@ using System.Text;
 namespace JKorTech.ShipSections
 {
     public abstract class SectionData<T> : SectionDataBase
-        where T: SectionDataBase
+        where T: SectionData<T>
     {
         protected abstract void Merge(T dataToMerge);
 

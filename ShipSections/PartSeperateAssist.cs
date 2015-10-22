@@ -27,9 +27,11 @@ namespace JKorTech.ShipSections
                 var info = data1.FindModuleImplementing<SectionInfo>();
                 CopySectionDataToOtherPartInSection(info, true);
             }
-            if(data0 == ConstructionEventType.PartCreated && data1 == EditorLogic.RootPart)
+            if (data0 == ConstructionEventType.PartCreated && data1 == EditorLogic.RootPart)
             {
-                data1.FindModuleImplementing<SectionInfo>().isSectionRoot = true;
+                var sectionInfo = data1.FindModuleImplementing<SectionInfo>();
+                sectionInfo.isSectionRoot = true;
+                sectionInfo.InitializeAsNewSection();
             }
         }
     }
@@ -38,7 +40,6 @@ namespace JKorTech.ShipSections
     {
         void Start()
         {
-            Debug.Log("{SS} Starting PartSeperateAssist.");
             SubscribeToEvents();
         }
 

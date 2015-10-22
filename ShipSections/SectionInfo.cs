@@ -31,14 +31,35 @@ namespace JKorTech.ShipSections
             base.OnLoad(node);
             var dataContainerNode = node.GetNode("CONTAINER");
             if (dataContainerNode != null)
-                ConfigNode.LoadObjectFromConfig(dataContainer, dataContainerNode);
+                dataContainer.OnLoad(dataContainerNode);
         }
 
         public override void OnSave(ConfigNode node)
         {
             base.OnSave(node);
-            var dataContainerNode = node.AddNode("CONTAINER");
-            ConfigNode.CreateConfigFromObject(dataContainer);
+            node.AddNode("CONTAINER", dataContainer.OnSave());
+        }
+
+        internal void InitializeAsNewSection()
+        {
+            AddDefaultSectionData();
+        }
+
+        private static SectionDataBase CreateSectionDataDefault(Type type, ConfigNode defaultDataNode)
+        {
+            var data = (SectionDataBase)Activator.CreateInstance(type);
+            ConfigNode.LoadObjectFromConfig(data, defaultDataNode);
+            return data;
+        }
+
+        private void AddDefaultSectionData()
+        {
+            foreach (SectionDataBase data in SectionDataDictionary.SectionDataTypes
+                            .Select(type => CreateSectionDataDefault(type.Key, type.Value)))
+            {
+                dataContainer.AddOrUpdateSectionDataForMod(data);
+            }
+
         }
     }
 }

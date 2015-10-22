@@ -14,25 +14,8 @@ namespace JKorTech.ShipSections
         public void CreateNewSection()
         {
             SetNewSection(part, section, GetNewSectionName());
-            AddDefaultSectionData();
+            InitializeAsNewSection();
             isSectionRoot = true;
-        }
-
-        private static SectionDataBase CreateSectionDataDefault(Type type, ConfigNode defaultDataNode)
-        {
-            var data = (SectionDataBase)Activator.CreateInstance(type);
-            ConfigNode.LoadObjectFromConfig(data, defaultDataNode);
-            return data;
-        }
-
-        private void AddDefaultSectionData()
-        {
-            foreach (SectionDataBase data in SectionDataDictionary.SectionDataTypes
-                            .Select(type => CreateSectionDataDefault(type.Key, type.Value)))
-            {
-                dataContainer.AddOrUpdateSectionDataForMod(data);
-            }
-
         }
 
         private static string GetNewSectionName()
