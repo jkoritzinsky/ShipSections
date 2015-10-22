@@ -7,7 +7,7 @@ using UnityEngine;
 namespace JKorTech.ShipSections
 {
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
-    public class PartSeperateAssistEditor : PartSeperateAssist
+    public class ShipSectionsEditorAssit : PartSeperateAssist
     {
         internal override void SubscribeToEvents()
         {
@@ -26,6 +26,10 @@ namespace JKorTech.ShipSections
             {
                 var info = data1.FindModuleImplementing<SectionInfo>();
                 CopySectionDataToOtherPartInSection(info, true);
+            }
+            if(data0 == ConstructionEventType.PartCreated && data1 == EditorLogic.RootPart)
+            {
+                data1.FindModuleImplementing<SectionInfo>().isSectionRoot = true;
             }
         }
     }

@@ -10,7 +10,7 @@ namespace JKorTech.ShipSections
             var sectionDataDefinitions = GameDatabase.Instance.GetConfigNodes("SECTIONDATADEF");
             foreach (var def in sectionDataDefinitions)
             {
-                if (!def.HasValue("type"))
+                if (!def.HasValue("name"))
                 {
                     UnityEngine.Debug.LogWarning("[ShipSections] Malformed SECTIONDATADEF.");
                 }
