@@ -19,11 +19,20 @@ namespace JKorTech.ShipSections
 
         public override void OnStart(StartState state)
         {
-            if(state != StartState.None && section == DefaultSection)
+            if(state != StartState.None)
             {
-                section = part.parent?.FindModuleImplementing<SectionInfo>()?.section ?? DefaultSection;
+                TrySetSectionBasedOnParent();
             }
             base.OnStart(state);
+        }
+
+        internal void TrySetSectionBasedOnParent()
+        {
+            if (section == DefaultSection)
+            {
+                section = part.parent?.FindModuleImplementing<SectionInfo>()?.section ?? DefaultSection;
+                UnityEngine.Debug.Log("Set section name to: " + section); 
+            }
         }
 
         public override void OnLoad(ConfigNode node)
@@ -31,7 +40,10 @@ namespace JKorTech.ShipSections
             base.OnLoad(node);
             var dataContainerNode = node.GetNode("CONTAINER");
             if (dataContainerNode != null)
+            {
+                AddDefaultSectionData(); // This adds support for adding more recently installed mod data into a section
                 dataContainer.OnLoad(dataContainerNode);
+            }
         }
 
         public override void OnSave(ConfigNode node)

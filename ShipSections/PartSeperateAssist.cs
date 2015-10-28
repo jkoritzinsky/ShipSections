@@ -22,16 +22,19 @@ namespace JKorTech.ShipSections
 
         private void EditorPartEvent(ConstructionEventType data0, Part data1)
         {
+            var sectionInfo = data1.FindModuleImplementing<SectionInfo>();
             if (data0 == ConstructionEventType.PartDetached)
             {
-                var info = data1.FindModuleImplementing<SectionInfo>();
-                CopySectionDataToOtherPartInSection(info, true);
+                CopySectionDataToOtherPartInSection(sectionInfo, true);
             }
             if (data0 == ConstructionEventType.PartCreated && data1 == EditorLogic.RootPart)
             {
-                var sectionInfo = data1.FindModuleImplementing<SectionInfo>();
                 sectionInfo.isSectionRoot = true;
                 sectionInfo.InitializeAsNewSection();
+            }
+            if(data0 == ConstructionEventType.PartAttached)
+            {
+                sectionInfo.TrySetSectionBasedOnParent();
             }
         }
     }

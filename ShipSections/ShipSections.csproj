@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\ShipSections\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release\ShipSections\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,6 +46,11 @@
   <ItemGroup>
     <Compile Include="API.cs" />
     <Compile Include="AutoLoadSectionDataTests.cs" />
+    <Compile Include="GuiLayout.cs" />
+    <Compile Include="KSPPluginFramework\ExtensionsUnity.cs" />
+    <Compile Include="KSPPluginFramework\MonoBehaviourExtended.cs" />
+    <Compile Include="KSPPluginFramework\MonoBehaviourWindow.cs" />
+    <Compile Include="KSPPluginFramework\SkinsLibrary.cs" />
     <Compile Include="PartSeperateAssist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionData.cs" />
@@ -53,6 +58,7 @@
     <Compile Include="SectionDataContainer.cs" />
     <Compile Include="SectionInfo.cs" />
     <Compile Include="SectionDataDictionary.cs" />
+    <Compile Include="SectionNameUI.cs" />
     <Compile Include="SectionSplitter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +68,11 @@
     <None Include="TestSectionData.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ShipSections.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

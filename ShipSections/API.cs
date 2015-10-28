@@ -26,8 +26,22 @@ namespace JKorTech.ShipSections
             }
         }
 
+        public static bool AnyCurrentVesel
+        {
+            get
+            {
+                if (HighLogic.LoadedSceneIsEditor)
+                    return EditorLogic.SortedShipList != null && EditorLogic.SortedShipList.Count != 0;
+                else if (HighLogic.LoadedSceneIsFlight)
+                    return FlightGlobals.ActiveVessel != null;
+                else
+                    return false;
+            }
+        }
+
         public static void ChangeSectionName(string currentSectionName, string newSectionName)
         {
+            if (currentSectionName == newSectionName) return;
             if (SectionNames.Contains(newSectionName))
                 MergeSections(currentSectionName, newSectionName);
             else
