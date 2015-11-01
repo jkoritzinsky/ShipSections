@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace JKorTech.ShipSections
+﻿namespace JKorTech.ShipSections
 {
     public class EmptySectionData : SectionData<EmptySectionData>
     {
