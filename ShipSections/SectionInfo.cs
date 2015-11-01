@@ -17,8 +17,15 @@ namespace JKorTech.ShipSections
 
         internal SectionDataContainer dataContainer = new SectionDataContainer();
 
+        [System.Diagnostics.Conditional("DEBUG")]
+        private void EnableDebugInDebugMode()
+        {
+            Fields[nameof(isSectionRoot)].guiActiveEditor = true;
+        }
+
         public override void OnStart(StartState state)
         {
+            EnableDebugInDebugMode();
             if(state != StartState.None)
             {
                 TrySetSectionBasedOnParent();
