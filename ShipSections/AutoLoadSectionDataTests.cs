@@ -11,7 +11,7 @@
     public class SectionDataWithInfo : SectionData<SectionDataWithInfo>
     {
         [Persistent]
-        private int value;
+        public int value;
 
         protected override void Merge(SectionDataWithInfo dataToMerge)
         {

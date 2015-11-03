@@ -67,12 +67,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="AutoLoadSectionDataTests.cs" />
+    <Compile Include="AutoLoadSectionDataTestUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ShipSections.cfg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-
   </ItemGroup>
   <ItemGroup>
     <Content Include="ShipSections.png">
