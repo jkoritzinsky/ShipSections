@@ -1,7 +1,7 @@
 ﻿namespace JKorTech.ShipSections
 {
     public abstract class SectionData<T> : SectionDataBase
-        where T: SectionData<T>
+        where T: SectionData<T>, new()
     {
         protected abstract void Merge(T dataToMerge);
 

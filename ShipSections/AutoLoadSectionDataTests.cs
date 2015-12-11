@@ -18,4 +18,15 @@
             value = dataToMerge.value;
         }
     }
+
+    public class SectionDataWithInfoNoTemplate : SectionData<SectionDataWithInfoNoTemplate>
+    {
+        [Persistent]
+        public int value;
+
+        protected override void Merge(SectionDataWithInfoNoTemplate dataToMerge)
+        {
+            value = dataToMerge.value;
+        }
+    }
 }

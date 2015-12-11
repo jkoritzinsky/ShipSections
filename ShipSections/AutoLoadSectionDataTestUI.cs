@@ -37,6 +37,11 @@ namespace JKorTech.ShipSections
                         GUILayout.Label("Data:");
                         GUILayout.Label(API.GetSectionDataForMod<SectionDataWithInfo>(section).value.ToString());
                     }
+                    using (new GuiLayout(GuiLayout.Method.Horizontal))
+                    {
+                        GUILayout.Label("Data:");
+                        GUILayout.Label(API.GetSectionDataForMod<SectionDataWithInfoNoTemplate>(section).value.ToString());
+                    }
                 }
             }
         }
