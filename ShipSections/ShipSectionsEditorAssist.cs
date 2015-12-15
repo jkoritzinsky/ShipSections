@@ -1,13 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace JKorTech.ShipSections
 {
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
-    public class ShipSectionsEditorAssit : MonoBehaviour
+    public class ShipSectionsEditorAssit : KSPPluginFramework.MonoBehaviourExtended
     {
 
-        void Start()
+        internal override void Start()
         {
             SubscribeToEvents();
         }
@@ -32,7 +33,7 @@ namespace JKorTech.ShipSections
             from.isSectionRoot = !unsetAsRoot;
         }
 
-        void OnDestroy()
+        internal override void OnDestroy()
         {
             UnsubscribeFromEvents();
         }
@@ -40,11 +41,32 @@ namespace JKorTech.ShipSections
         internal void SubscribeToEvents()
         {
             GameEvents.onEditorPartEvent.Add(EditorPartEvent);
+            GameEvents.onEditorLoad.Add(EditorLoad);
+        }
+
+        private void EditorLoad(ShipConstruct data0, CraftBrowser.LoadType data1)
+        {
+            switch (data1)
+            {
+                case CraftBrowser.LoadType.Merge:
+                    RenameSections(data0);
+                    break;
+            }
+        }
+
+        private void RenameSections(ShipConstruct ship)
+        {
+            foreach (var part in ship)
+            {
+                var info = part.FindModuleImplementing<SectionInfo>();
+                info.section = ship.shipName + " " + info.section;
+            }
         }
 
         internal void UnsubscribeFromEvents()
         {
             GameEvents.onEditorPartEvent.Remove(EditorPartEvent);
+            GameEvents.onEditorLoad.Remove(EditorLoad);
         }
 
 
@@ -57,6 +79,7 @@ namespace JKorTech.ShipSections
             }
             if (data0 == ConstructionEventType.PartCreated && data1 == EditorLogic.RootPart)
             {
+                LogFormatted_DebugOnly("Initializing root section.");
                 sectionInfo.isSectionRoot = true;
                 sectionInfo.InitializeAsNewSection();
             }

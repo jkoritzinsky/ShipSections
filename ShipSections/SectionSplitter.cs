@@ -13,6 +13,10 @@ namespace JKorTech.ShipSections
             SetNewSection(part, section, GetNewSectionName());
             InitializeAsNewSection();
             isSectionRoot = true;
+            foreach (var symmetryPart in part.symmetryCounterparts)
+            {
+                SetNewSection(symmetryPart, symmetryPart.FindModuleImplementing<SectionInfo>().section, section);
+            }
         }
 
         private static string GetNewSectionName()

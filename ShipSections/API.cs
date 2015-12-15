@@ -11,7 +11,7 @@ namespace JKorTech.ShipSections
             {
                 if (HighLogic.LoadedSceneIsEditor)
                 {
-                    return EditorLogic.SortedShipList;
+                    return EditorLogic.fetch.ship;
                 }
                 else if (HighLogic.LoadedSceneIsFlight)
                 {
@@ -29,7 +29,7 @@ namespace JKorTech.ShipSections
             get
             {
                 if (HighLogic.LoadedSceneIsEditor)
-                    return EditorLogic.SortedShipList != null && EditorLogic.SortedShipList.Count != 0;
+                    return EditorLogic.fetch.ship?.Any() ?? false;
                 else if (HighLogic.LoadedSceneIsFlight)
                     return FlightGlobals.ActiveVessel != null;
                 else
@@ -85,13 +85,31 @@ namespace JKorTech.ShipSections
 
         public static readonly EventData<string, string> SectionsMerged = new EventData<string, string>(nameof(SectionsMerged));
 
+        public static readonly EventData<Part> PartSectionInitialized = new EventData<Part>(nameof(PartSectionInitialized));
+
         public static IEnumerable<string> SectionNames
             => CurrentVesselParts.Select(part => part.FindModuleImplementing<SectionInfo>().section).Distinct();
         public static IEnumerable<IGrouping<string, Part>> PartsBySection
-            => CurrentVesselParts.GroupBy(part => part.FindModuleImplementing<SectionInfo>()?.section);
+            => EnsureSectionRootsExist(CurrentVesselParts.GroupBy(part => part.FindModuleImplementing<SectionInfo>()?.section));
         public static T GetSectionDataForMod<T>(string sectionName)
             where T : SectionDataBase
             => PartsBySection.Single(section => section.Key == sectionName).Select(part => part.FindModuleImplementing<SectionInfo>())
                     .Single(info => info.isSectionRoot).dataContainer.GetSectionData<T>();
+
+        public static IEnumerable<IGrouping<string, Part>> EnsureSectionRootsExist(IEnumerable<IGrouping<string, Part>> sections)
+        {
+            UnityEngine.Debug.Log("[ShipSections] Ensuring that there is a section root");
+            foreach (var section in sections)
+            {
+                UnityEngine.Debug.Log($"[ShipSections] Checking section {section.Key}");
+                if (!section.Any(part => part.FindModuleImplementing<SectionInfo>().isSectionRoot))
+                {
+                    var info = section.First().FindModuleImplementing<SectionInfo>();
+                    info.isSectionRoot = true;
+                    info.InitializeAsNewSection();
+                }
+            }
+            return sections;
+        }
     }
 }

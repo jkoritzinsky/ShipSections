@@ -29,6 +29,15 @@ namespace JKorTech.ShipSections
                 TrySetSectionBasedOnParent();
             }
             base.OnStart(state);
+            try
+            {
+                API.PartSectionInitialized.Fire(part);
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[ShipSections] {nameof(API.PartSectionInitialized)} threw an exception. If this is not during opening a ship never opened with ShipSections, report this error.");
+                UnityEngine.Debug.LogException(ex);
+            }
         }
 
         internal void TrySetSectionBasedOnParent()
