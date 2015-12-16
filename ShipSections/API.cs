@@ -73,7 +73,7 @@ namespace JKorTech.ShipSections
         {
             foreach (var part in parts)
             {
-                SectionInfo info = part.FindModuleImplementing<SectionInfo>();
+                var info = part.FindModuleImplementing<SectionInfo>();
                 if (info != null)
                 {
                     info.section = newSectionName;
@@ -98,10 +98,8 @@ namespace JKorTech.ShipSections
 
         public static IEnumerable<IGrouping<string, Part>> EnsureSectionRootsExist(IEnumerable<IGrouping<string, Part>> sections)
         {
-            UnityEngine.Debug.Log("[ShipSections] Ensuring that there is a section root");
             foreach (var section in sections)
             {
-                UnityEngine.Debug.Log($"[ShipSections] Checking section {section.Key}");
                 if (!section.Any(part => part.FindModuleImplementing<SectionInfo>().isSectionRoot))
                 {
                     var info = section.First().FindModuleImplementing<SectionInfo>();

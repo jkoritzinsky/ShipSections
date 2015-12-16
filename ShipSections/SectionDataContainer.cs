@@ -42,7 +42,7 @@ namespace JKorTech.ShipSections
 
         private static ConfigNode ListToConfigNode<T>(List<T> list)
         {
-            ConfigNode retNode = new ConfigNode();
+            var retNode = new ConfigNode();
             foreach (var item in list)
                 retNode.AddNode(ConfigNode.CreateConfigFromObject(item));
             return retNode;
@@ -50,16 +50,16 @@ namespace JKorTech.ShipSections
 
         private static List<T> ConfigNodeToList<T>(ConfigNode node)
         {
-            List<T> retList = new List<T>();
+            var retList = new List<T>();
             foreach (var element in node.GetNodes())
             {
-                Type dataType = SectionDataDictionary.SectionDataTypes.Keys.FirstOrDefault(key => key.FullName == element.name);
-                if(dataType == null)
+                var dataType = SectionDataDictionary.SectionDataTypes.Keys.FirstOrDefault(key => key.FullName == element.name);
+                if (dataType == null)
                 {
                     UnityEngine.Debug.LogWarning($"Could not find class {element.name}.  Not re-loading from persistance.");
                     continue;
                 }
-                object obj = Activator.CreateInstance(dataType);
+                var obj = Activator.CreateInstance(dataType);
                 ConfigNode.LoadObjectFromConfig(obj, element);
                 retList.Add((T)obj);
             }

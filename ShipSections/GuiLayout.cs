@@ -30,7 +30,7 @@ namespace JKorTech.ShipSections
         public GuiLayout(Method method, Rect areaRect)
         {
             this.method = method;
-            if (method == Method.ScrollView)
+            if (method == Method.Area)
                 GUILayout.BeginArea(areaRect);
             else
                 throw new ArgumentException(nameof(method));
