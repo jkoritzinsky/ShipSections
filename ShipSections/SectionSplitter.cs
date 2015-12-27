@@ -17,6 +17,7 @@ namespace JKorTech.ShipSections
             {
                 SetNewSection(symmetryPart, symmetryPart.FindModuleImplementing<SectionInfo>().section, section);
             }
+            API.NewSectionCreated.Fire(section);
         }
 
         private static string GetNewSectionName()

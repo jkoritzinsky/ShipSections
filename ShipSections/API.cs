@@ -81,6 +81,8 @@ namespace JKorTech.ShipSections
             }
         }
 
+        public static readonly EventData<string> NewSectionCreated = new EventData<string>(nameof(NewSectionCreated));
+
         public static readonly EventData<string, string> SectionRenamed = new EventData<string, string>(nameof(SectionRenamed));
 
         public static readonly EventData<string, string> SectionsMerged = new EventData<string, string>(nameof(SectionsMerged));
@@ -96,7 +98,7 @@ namespace JKorTech.ShipSections
             => PartsBySection.Single(section => section.Key == sectionName).Select(part => part.FindModuleImplementing<SectionInfo>())
                     .Single(info => info.isSectionRoot).dataContainer.GetSectionData<T>();
 
-        public static IEnumerable<IGrouping<string, Part>> EnsureSectionRootsExist(IEnumerable<IGrouping<string, Part>> sections)
+        private static IEnumerable<IGrouping<string, Part>> EnsureSectionRootsExist(IEnumerable<IGrouping<string, Part>> sections)
         {
             foreach (var section in sections)
             {
