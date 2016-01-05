@@ -20,6 +20,7 @@ How do I use ShipSections? (Modder)
 2. Derive your class from `SectionData<Your Class>`
 3. Implement the Merge method. This method takes in another instance of your data class.  Your job is to merge the data from that instance into your instance.  This happens upon initial loading (merge current data into defaults), and whenever sections are merged.
 4. Optional: Create a config file with default values.
+5. Use the events and methods on the `ShipSections.API` class to interface with your section data.
 
 Creating a config file with default values
 ---
