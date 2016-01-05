@@ -8,7 +8,7 @@ License: The MIT License (MIT)
 using System;
 using UnityEngine;
 
-namespace KSPPluginFramework
+namespace JKorTech.ShipSections.KSPPluginFramework
 {
 
     [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]

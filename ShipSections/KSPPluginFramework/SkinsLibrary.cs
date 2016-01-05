@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace KSPPluginFramework
+namespace JKorTech.ShipSections.KSPPluginFramework
 {
     internal static class SkinsLibrary
     {

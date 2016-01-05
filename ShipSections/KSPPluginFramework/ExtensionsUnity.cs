@@ -8,7 +8,7 @@ License: The MIT License (MIT)
 using System;
 using UnityEngine;
 
-namespace KSPPluginFramework
+namespace JKorTech.ShipSections.KSPPluginFramework
 {
     /// <summary>
     /// CLass containing some extension methods for Unity Objects
