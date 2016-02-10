@@ -1,31 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace JKorTech.ShipSections
 {
     public static class SectionDataDictionary
     {
-        public static void ModuleManagerPostLoad()
+        private class SectionDataLoadingSystem : LoadingSystem
         {
-            UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Loading SECTIONDATADEF's into default dictionary.");
-            var sectionDataDefinitions = GameDatabase.Instance.GetConfigNodes("SECTIONDATADEF");
-            var loadedTypes = LoadTypes();
-            foreach(var sectionDataType in loadedTypes)
+            private bool loaded;
+            public override bool IsReady()
             {
-                SectionDataTypes.Add(sectionDataType, new ConfigNode());
-                UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Loading {sectionDataType.FullName} into the section dictionary");
+                return loaded;
             }
-            foreach (var def in sectionDataDefinitions)
+            public override string ProgressTitle()
             {
-                if (!def.HasValue("name"))
+                return nameof(SectionDataLoadingSystem);
+            }
+            public override float ProgressFraction()
+            {
+                return .9f;
+            }
+            public override void StartLoad()
+            {
+                Debug.Log($"[{nameof(ShipSections)}] Loading SECTIONDATADEF's into default dictionary.");
+                var sectionDataDefinitions = GameDatabase.Instance.GetConfigNodes("SECTIONDATADEF");
+                var loadedTypes = LoadTypes();
+                foreach (var sectionDataType in loadedTypes)
                 {
-                    UnityEngine.Debug.LogWarning($"[{nameof(ShipSections)}] Malformed SECTIONDATADEF.");
+                    SectionDataTypes.Add(sectionDataType, new ConfigNode());
+                    Debug.Log($"[{nameof(ShipSections)}] Loading {sectionDataType.FullName} into the section dictionary");
                 }
-                UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Loading SECTIONDATADEF for \"{def.GetValue("name")}\"");
-                SectionDataTypes[loadedTypes.FirstOrDefault(type => type.Name == def.GetValue("name")) ?? typeof(object)] = def;
+                foreach (var def in sectionDataDefinitions)
+                {
+                    if (!def.HasValue("name"))
+                    {
+                        Debug.LogWarning($"[{nameof(ShipSections)}] Malformed SECTIONDATADEF.");
+                    }
+                    Debug.Log($"[{nameof(ShipSections)}] Loading SECTIONDATADEF for \"{def.GetValue("name")}\"");
+                    SectionDataTypes[loadedTypes.FirstOrDefault(type => type.Name == def.GetValue("name")) ?? typeof(object)] = def;
+                }
+                SectionDataTypes.Remove(typeof(object));
+                loaded = true;
             }
-            SectionDataTypes.Remove(typeof(object));
+        }
+
+        [KSPAddon(KSPAddon.Startup.Instantly, false)]
+        public class LoadingSystemLoader : MonoBehaviour
+        {
+            void Awake()
+            {
+                var list = LoadingScreen.Instance.loaders;
+                if (list != null)
+                {
+                    // Need to create a GameObject so that Unity will correctly initialize the LoadingSystem
+                    var gameObject = new GameObject(nameof(SectionDataLoadingSystem));
+                    var loadingSystem = gameObject.AddComponent<SectionDataLoadingSystem>();
+                    list.Add(loadingSystem);
+                }
+            }
         }
 
         private static List<Type> LoadTypes()
@@ -33,7 +67,7 @@ namespace JKorTech.ShipSections
             var types = new List<Type>();
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Searching {assembly.GetName()} for SectionData types");
+                Debug.Log($"[{nameof(ShipSections)}] Searching {assembly.GetName()} for SectionData types");
                 try
                 {
                     foreach (var type in assembly.GetTypes())
@@ -43,7 +77,7 @@ namespace JKorTech.ShipSections
                             var baseType = type.BaseType;
                             if (baseType.IsGenericType && Equals(baseType.GetGenericTypeDefinition(), typeof(SectionData<>)))
                             {
-                                UnityEngine.Debug.Log($"Found SectionData type {type.Name}");
+                                Debug.Log($"Found SectionData type {type.Name}");
                                 types.Add(type);
                             }
                         }
@@ -51,7 +85,7 @@ namespace JKorTech.ShipSections
                 }
                 catch (Exception ex)
                 {
-                    UnityEngine.Debug.LogException(ex);
+                    Debug.LogException(ex);
                 }
             }
             return types;
