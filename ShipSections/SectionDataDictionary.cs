@@ -10,7 +10,7 @@ namespace JKorTech.ShipSections
         {
             UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Loading SECTIONDATADEF's into default dictionary.");
             var sectionDataDefinitions = GameDatabase.Instance.GetConfigNodes("SECTIONDATADEF");
-            var loadedTypes = LoadTypes().ToList();
+            var loadedTypes = LoadTypes();
             foreach(var sectionDataType in loadedTypes)
             {
                 SectionDataTypes.Add(sectionDataType, new ConfigNode());
@@ -28,13 +28,33 @@ namespace JKorTech.ShipSections
             SectionDataTypes.Remove(typeof(object));
         }
 
-        private static IEnumerable<Type> LoadTypes()
+        private static List<Type> LoadTypes()
         {
-            return from t in AppDomain.CurrentDomain.GetAssemblies().SelectMany(assem => assem.GetTypes())
-                   let baseType = t.BaseType
-                   where baseType != null
-                   where baseType.IsGenericType && Equals(baseType.GetGenericTypeDefinition(), typeof(SectionData<>))
-                   select t;
+            var types = new List<Type>();
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                UnityEngine.Debug.Log($"[{nameof(ShipSections)}] Searching {assembly.GetName()} for SectionData types");
+                try
+                {
+                    foreach (var type in assembly.GetTypes())
+                    {
+                        if(type.BaseType != null)
+                        {
+                            var baseType = type.BaseType;
+                            if (baseType.IsGenericType && Equals(baseType.GetGenericTypeDefinition(), typeof(SectionData<>)))
+                            {
+                                UnityEngine.Debug.Log($"Found SectionData type {type.Name}");
+                                types.Add(type);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UnityEngine.Debug.LogException(ex);
+                }
+            }
+            return types;
         }
 
         public static Dictionary<Type, ConfigNode> SectionDataTypes { get; } = new Dictionary<Type, ConfigNode>();
