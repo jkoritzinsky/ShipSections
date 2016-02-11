@@ -61,6 +61,7 @@
     <Compile Include="SectionDataDictionary.cs" />
     <Compile Include="SectionNameUI.cs" />
     <Compile Include="SectionSplitter.cs" />
+    <Compile Include="SmartRename.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'Debug'">
     <None Include="TestSectionData.cfg">
